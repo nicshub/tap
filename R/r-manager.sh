@@ -15,5 +15,9 @@ Rscript hello.R
 echo "Classify ${TWEET}"
 Rscript classify_opt.R -m ${MODEL} -t "${TWEET}"
 ;;
+"tapconsumer")
+echo "Running Tap Consumer"
+Rscript classify_consumer.R
+;;
 esac
 
