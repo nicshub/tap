@@ -38,7 +38,7 @@ consumer = KafkaConsumer(
      value_deserializer=lambda x: loads(x.decode('utf-8')))
 
 for message in consumer:
-    message = message.value
+    message = message.value 
     # collection.insert_one(message)
 
     print('{} added'.format(message))
