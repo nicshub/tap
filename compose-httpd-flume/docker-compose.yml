@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+   httpd:
+    build: ../httpd/
+    ports:
+        - "80:80"
+    volumes:
+       - log_data:/usr/local/apache2/logs/
+   flume:
+    depends_on:
+        - httpd
+    build: ../flume/
+    environment:
+           FLUME_CONF_FILE: apacheFlume.conf
+    volumes:
+        - log_data:/usr/local/apache2/logs/
+volumes:
+    log_data: {}

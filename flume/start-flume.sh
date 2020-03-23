@@ -12,7 +12,9 @@ COMMAND="flume-ng agent \
   -c ${FLUME_CONF_DIR} \
   -f ${FLUME_CONF_DIR}/${FLUME_CONF_FILE}\
   -n ${FLUME_AGENT_NAME} \
-  -Dflume.root.logger=DEBUG,console
+  -Dflume.root.logger=INFO,console
+  -Dorg.apache.flume.log.printconfig=true 
+  -Dorg.apache.flume.log.rawdata=true
   "
 
 ${COMMAND}
