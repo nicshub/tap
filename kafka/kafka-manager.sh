@@ -1,5 +1,4 @@
 #!/bin/bash
-set -v
 ZK_DATA_DIR=/tmp/zookeeper
 ZK_SERVER="localhost"
 KAFKA_TOPIC="tap"

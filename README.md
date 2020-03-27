@@ -1,6 +1,7 @@
 # tap
 ## ip
 * 10.0.100.10 flume
+* 10.0.100.21 zk-ui
 * 10.0.100.22 zk-server
 * 10.0.100.23 kafka-server
 * 10.0.100.24 kafka-create topic

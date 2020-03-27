@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-REM Stop
+# Stop
 docker stop kafkaServer
 
-REM Remove previuos container 
+# Remove previuos container 
 docker container rm kafkaServer
 
 docker build ../kafka/ --tag tap:kafka
