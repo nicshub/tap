@@ -1,0 +1,3 @@
+[submodule "docker-hadoop"]
+	path = docker-hadoop
+	url = git@github.com:daxcpp/docker-hadoop.git
