@@ -29,13 +29,17 @@ kafka-console-producer.sh --broker-list 10.0.100.23:9092 --topic ${KAFKA_TOPIC}
 ;;
 "consumer")
 cd ${KAFKA_DIR}
-kafka-console-consumer.sh --bootstrap-server 10.0.100.23:9092 --topic ${KAFKA_TOPIC} --from-beginning
+kafka-console-consumer.sh --bootstrap-server 10.0.100.23:9092 --topic ${KAFKA_TOPIC} --from-beginning ${KAFKA_CONSUMER_PROPERTIES}
 ;;
 "connect-standalone")
 cd ${KAFKA_DIR}
 #connect-standalone-twitter.properties mysqlSinkTwitter.conf
 touch /tmp/my-test.txt
-bin/connect-standalone.sh config/${KAFKA_WORKER_PROPERTIES} config/${KAFKA_CONNECTOR_PROPERTIES}  
+bin/connect-standalone.sh config/DPROPERTIES} config/${KAFKA_CONNECTOR_PROPERTIES}  
+;;
+"run-class")
+cd ${KAFKA_DIR}
+bin/kafka-run-class.sh ${KAFKA_CLASS} --broker-list 10.0.100.23:9092 
 ;;
 esac
 
