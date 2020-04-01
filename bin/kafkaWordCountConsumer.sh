@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run -e KAFKA_ACTION=consumer -e KAFKA_TOPIC=streams-wordcount-output -e KAFKA_CONSUMER_PROPERTIES="--formatter kafka.tools.DefaultMessageFormatter --property print.key=true --property print.value=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer" --network tap   -it tap:kafka

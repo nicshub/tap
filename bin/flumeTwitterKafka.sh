@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-REM Stop
+#REM Stop
 docker stop tapflume
 
-REM Remove previuos container 
+#REM Remove previuos container 
 docker container rm tapflume
 
 #REM Build

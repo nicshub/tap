@@ -4,7 +4,7 @@ ENV PATH /opt/kafka/bin:$PATH
 ENV KAFKA_DIR "/opt/kafka"
 ARG KAFKA_VERSION="2.12-2.4.1"
 
-RUN apk update && apk add --no-cache bash 
+RUN apk update && apk add --no-cache bash gcompat
 
 # Installing Kafka
 # ADD will automatically extract the file
