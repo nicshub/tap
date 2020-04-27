@@ -1,0 +1,658 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "slideshow": {
+     "slide_type": "slide"
+    }
+   },
+   "source": [
+    "#  Spark RDD and Beyond"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "slideshow": {
+     "slide_type": "subslide"
+    }
+   },
+   "source": [
+    "## Types of RDD\n",
+    "\n",
+    "- ParallelCollectionRDD — An RDD created by Spark Context through parallelizing an existing collection. Eg. sc.parallelize, sc.makeRDD\n",
+    "- CoGroupedRDD — An RDD that cogroups its parents. For each key k in parent RDDs, the resulting RDD contains a tuple with the list of values for that key.\n",
+    "- HadoopRDD is an RDD that provides core functionality for reading data stored in HDFS using the older MapReduce API. The most notable use case is the return RDD of SparkContext.textFile.\n",
+    "- MapPartitionsRDD — An RDD that applies the provided function to every partition of the parent RDD. A result of calling operations like map, flatMap, filter, mapPartitions, etc.\n",
+    "- CoalescedRDD — a result of repartition or coalesce transformations.\n",
+    "- ShuffledRDD — a result of shuffling, e.g. after repartition or coalesce transformations.\n",
+    "- PipedRDD — an RDD created by piping elements to a forked external process.\n",
+    "- SequenceFileRDD — is an RDD that can be saved as a SequenceFile.\n",
+    "\n",
+    "https://medium.com/knoldus/rdd-sparks-fault-tolerant-in-memory-weapon-130f8df2f996"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "slideshow": {
+     "slide_type": "subslide"
+    }
+   },
+   "source": [
+    "# Let's do practice"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "slideshow": {
+     "slide_type": "subslide"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<module 'findspark' from '/home/nics/anaconda3/lib/python3.7/site-packages/findspark.py'>"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import findspark\n",
+    "import pyspark\n",
+    "findspark.find() \n",
+    "findspark"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "slideshow": {
+     "slide_type": "fragment"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "\n",
+       "        <div>\n",
+       "            <p><b>SparkContext</b></p>\n",
+       "\n",
+       "            <p><a href=\"http://172.24.253.44:4040\">Spark UI</a></p>\n",
+       "\n",
+       "            <dl>\n",
+       "              <dt>Version</dt>\n",
+       "                <dd><code>v2.4.5</code></dd>\n",
+       "              <dt>Master</dt>\n",
+       "                <dd><code>local</code></dd>\n",
+       "              <dt>AppName</dt>\n",
+       "                <dd><code>Tap</code></dd>\n",
+       "            </dl>\n",
+       "        </div>\n",
+       "        "
+      ],
+      "text/plain": [
+       "<SparkContext master=local appName=Tap>"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "conf = pyspark.SparkConf().setAppName('Tap').setMaster('local')\n",
+    "sc = pyspark.SparkContext(conf=conf)\n",
+    "sc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create a RDD \n",
+    "digits = sc.parallelize([0,1,2,3,4,5,6,7,8,9])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "digits.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "slideshow": {
+     "slide_type": "subslide"
+    }
+   },
+   "source": [
+    "# Trasformation"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Transformation return a new RDD"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## map(func)\t\n",
+    "Return a new distributed dataset formed by passing each element of the source through a function func. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "squares=digits.map(lambda x: x*x)\n",
+    "squares.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## filter(func)\t\n",
+    "Return a new dataset formed by selecting those elements of the source on which func returns true."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[0, 2, 4, 6, 8]"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "evens = digits.filter(lambda x: x % 2 == 0)\n",
+    "evens.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## flatMap(func)\t\n",
+    "Similar to map, but each input item can be mapped to 0 or more output items (so func should return a Seq rather than a single item)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[2, 3, 2, 2, 5, 2, 3, 7, 2, 2, 2, 3, 3]"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "def factors(nr):\n",
+    "    i = 2\n",
+    "    factors = []\n",
+    "    while i <= nr:\n",
+    "        if (nr % i) == 0:\n",
+    "            factors.append(i)\n",
+    "            nr = nr / i\n",
+    "        else:\n",
+    "            i = i + 1\n",
+    "    return factors\n",
+    "primes = digits.flatMap(lambda x: factors(x))\n",
+    "primes.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "slideshow": {
+     "slide_type": "subslide"
+    }
+   },
+   "source": [
+    "## distinct()\n",
+    "Return a new RDD that contains the intersection of elements in the source dataset and the argument."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[2, 3, 5, 7]"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "primes=primes.distinct()\n",
+    "primes.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    " ## sample()\n",
+    "Return a sampled subset of this RDD.\n",
+    "\n",
+    "Parameters\n",
+    "- withReplacement – can elements be sampled multiple times (replaced when sampled out)\n",
+    "- fraction – expected size of the sample as a fraction of this RDD’s size without replacement: probability that each element is chosen; fraction must be [0, 1] with replacement: expected number of times each element is chosen; fraction must be >= 0\n",
+    "- seed – seed for the random number generator"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[3, 9]"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "digits.sample(False,0.2).collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "slideshow": {
+     "slide_type": "subslide"
+    }
+   },
+   "source": [
+    "## union()\n",
+    "Return a new dataset that contains the union of the elements in the source dataset and the argument."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[0, 2, 4, 6, 8, 1, 3, 5, 7, 9]"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "odds = digits.filter(lambda x: x % 2 == 1)\n",
+    "yy = evens.union(odds)\n",
+    "yy.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## intersection()\n",
+    "Return a new RDD that contains the intersection of elements in the source dataset and the argument."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[0, 4]"
+      ]
+     },
+     "execution_count": 32,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "intersects=evens.intersection(squares)\n",
+    "intersects.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## cartesian()\n",
+    "When called on datasets of types T and U, returns a dataset of (T, U) pairs (all pairs of elements)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[(0, 1),\n",
+       " (0, 3),\n",
+       " (0, 5),\n",
+       " (0, 7),\n",
+       " (0, 9),\n",
+       " (2, 1),\n",
+       " (4, 1),\n",
+       " (2, 3),\n",
+       " (2, 5),\n",
+       " (4, 3),\n",
+       " (4, 5),\n",
+       " (2, 7),\n",
+       " (2, 9),\n",
+       " (4, 7),\n",
+       " (4, 9),\n",
+       " (6, 1),\n",
+       " (8, 1),\n",
+       " (6, 3),\n",
+       " (6, 5),\n",
+       " (8, 3),\n",
+       " (8, 5),\n",
+       " (6, 7),\n",
+       " (6, 9),\n",
+       " (8, 7),\n",
+       " (8, 9)]"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cart=evens.cartesian(odds)\n",
+    "cart.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## groupByKey()\n",
+    "When called on a dataset of (K, V) pairs, returns a dataset of (K, Iterable<V>) pairs."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[(0, <pyspark.resultiterable.ResultIterable at 0x7f8f2d1a1f90>),\n",
+       " (2, <pyspark.resultiterable.ResultIterable at 0x7f8f2d1a1d90>),\n",
+       " (4, <pyspark.resultiterable.ResultIterable at 0x7f8f2d1a1c50>),\n",
+       " (6, <pyspark.resultiterable.ResultIterable at 0x7f8f2d1a1e10>),\n",
+       " (8, <pyspark.resultiterable.ResultIterable at 0x7f8f546efd50>)]"
+      ]
+     },
+     "execution_count": 33,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cartgroup=cart.groupByKey()\n",
+    "cartgroup.collect()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "slideshow": {
+     "slide_type": "subslide"
+    }
+   },
+   "source": [
+    "# Actions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## reduce(func)\n",
+    "Aggregate the elements of the dataset using a function func (which takes two arguments and returns one). The function should be commutative and associative so that it can be computed correctly in parallel.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "45"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "sumOfDigits=digits.reduce(lambda a,b:a+b)\n",
+    "sumOfDigits"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Dataframes"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "A Dataset is a distributed collection of data. Dataset is a new interface added in Spark 1.6 that provides the benefits of RDDs (strong typing, ability to use powerful lambda functions) with the benefits of Spark SQL’s optimized execution engine. A Dataset can be constructed from JVM objects and then manipulated using functional transformations (map, flatMap, filter, etc.). The Dataset API is available in Scala and Java. Python does not have the support for the Dataset API. But due to Python’s dynamic nature, many of the benefits of the Dataset API are already available (i.e. you can access the field of a row by name naturally row.columnName). The case for R is similar."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "A DataFrame is a Dataset organized into named columns. It is conceptually equivalent to a table in a relational database or a data frame in R/Python, but with richer optimizations under the hood. DataFrames can be constructed from a wide array of sources such as: structured data files, tables in Hive, external databases, or existing RDDs. The DataFrame API is available in Scala, Java, Python, and R. In Scala and Java, a DataFrame is represented by a Dataset of Rows. In the Scala API, DataFrame is simply a type alias of Dataset[Row]. While, in Java API, users need to use Dataset<Row> to represent a DataFrame."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "A distributed collection of data grouped into named columns.\n",
+    "\n",
+    "A DataFrame is equivalent to a relational table in Spark SQL, and can be created using various functions in SparkSession:"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "https://www.kaggle.com/the-guardian/olympic-games#summer.csv"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "AttributeError",
+     "evalue": "'SparkContext' object has no attribute 'read'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mAttributeError\u001b[0m                            Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-41-8db5f3c722db>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0msummer\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0msc\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mread\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcsv\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"../dataset/olympic-games/summer.csv\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[0;31mAttributeError\u001b[0m: 'SparkContext' object has no attribute 'read'"
+     ]
+    }
+   ],
+   "source": [
+    "summer=sc.read.csv(\"../dataset/olympic-games/summer.csv\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Run Application"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pytap"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Biblio\n",
+    "- https://www.kdnuggets.com/2017/08/three-apache-spark-apis-rdds-dataframes-datasets.html\n",
+    "- https://www.slideshare.net/differentsachin/apache-spark-introduction-and-resilient-distributed-dataset-basics-and-deep-dive\n",
+    "- https://data-flair.training/blogs/apache-spark-rdd-vs-dataframe-vs-dataset/\n",
+    "- https://www.slideshare.net/taposhdr/resilient-distributed-datasets\n",
+    "- http://vishnuviswanath.com/spark_rdd.html\n",
+    "- https://sparkbyexamples.com/apache-spark-rdd/spark-rdd-actions/\n",
+    "- https://www.educba.com/rdd-in-spark/\n",
+    "- https://www.javahelps.com/2019/02/spark-03-understanding-resilient.html\n",
+    "- https://www.tutorialspoint.com/apache_spark/apache_spark_rdd.htm\n",
+    "- https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf\n",
+    "- https://www.sicara.ai/blog/2017-05-02-get-started-pyspark-jupyter-notebook-3-minutes"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "celltoolbar": "Slideshow",
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.6"
+  },
+  "rise": {
+   "scroll": "true",
+   "theme": "sky"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

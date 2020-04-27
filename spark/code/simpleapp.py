@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 
-logFile = "dataset/lotr_characters.csv"  # Should be some file on your system
+logFile = "spark/dataset/lotr_characters.csv"  # Should be some file on your system
 spark = SparkSession.builder.appName("SimpleApp").getOrCreate()
 logData = spark.read.text(logFile).cache()
 
