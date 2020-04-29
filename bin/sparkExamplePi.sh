@@ -6,4 +6,4 @@ docker stop sparkPi
 docker container rm sparkPi
 
 docker build ../spark/ --tag tap:spark
-docker run -e SPARK_ACTION=example --network tap --name sparkPi -it tap:spark SparkPi 10
+docker run -e SPARK_ACTION=example --network tap --name sparkPi -it tap:spark SparkPi 100

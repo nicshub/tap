@@ -6,5 +6,6 @@ dataset = spark.read.csv(input, header=True)
 
 dataset.show()
 
-dataset.groupBy('Year','Sport').count().collect()
+group=dataset.groupBy('Year','Sport').count()
+group.show()
 spark.stop()

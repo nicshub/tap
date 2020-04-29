@@ -1,5 +1,4 @@
 #!/bin/bash
-
 [[ -z "${SPARK_ACTION}" ]] && { echo "SPARK_ACTION required"; exit 1; }
 
 # ACTIONS start-zk, start-kafka, create-topic, 
@@ -19,6 +18,13 @@ echo "Running example ARGS $@"
 "pytap")
 cd /opt/tap/
 python ${TAP_CODE}
+;;
+"bash")
+while true
+do
+	echo "Keep Alive"
+	sleep 10
+done
 ;;
 esac
 

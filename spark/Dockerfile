@@ -7,7 +7,7 @@ ENV PATH $SPARK_DIR/bin:$PATH
 
 ADD setup/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz /opt
 
-RUN apt-get update && apt-get -y install bash python python-pip
+RUN apt-get update && apt-get -y install bash python python-pip netcat
 
 RUN pip install pyspark
 # Create Sym Link 
