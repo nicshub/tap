@@ -12,15 +12,14 @@ RUN apt-get update && apt-get -y install bash python python-pip netcat
 RUN pip install pyspark
 # Create Sym Link 
 RUN ln -s /opt/spark-${SPARK_VERSION}-bin-hadoop2.7 ${SPARK_DIR} 
-ADD dataset /opt/tap/spark/dataset
-ADD code/*  /opt/tap/
-ADD spark-manager.sh $SPARK_DIR/bin/spark-manager
 
-## Copy All conf here
-#ADD conf/* /opt/flume/conf/
-# Add compiled lib
-#ADD lib/* /opt/flume/lib/
-#EXPOSE 44444
+ADD dataset /opt/tap/spark/dataset
+# Add Python Code
+ADD code/*  /opt/tap/
+# Add Java Code
+ADD apps /opt/tap/apps
+# Add Spark Manager
+ADD spark-manager.sh $SPARK_DIR/bin/spark-manager
 
 WORKDIR ${SPARK_DIR}
 ENTRYPOINT [ "spark-manager" ]

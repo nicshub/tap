@@ -15,6 +15,12 @@ echo "Running example ARGS $@"
 "pyspark")
 ./bin/pyspark --master local[2]
 ;;
+"spark-submit-python")
+ ./bin/spark-submit --packages $2 /opt/tap/$1
+;;
+"spark-submit-apps")
+ ./bin/spark-submit --packages $3 --class $1 /opt/tap/apps/$2
+;;
 "pytap")
 cd /opt/tap/
 python ${TAP_CODE}
