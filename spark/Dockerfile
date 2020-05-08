@@ -9,7 +9,7 @@ ADD setup/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz /opt
 
 RUN apt-get update && apt-get -y install bash python python-pip netcat
 
-RUN pip install pyspark
+RUN pip install pyspark numpy
 # Create Sym Link 
 RUN ln -s /opt/spark-${SPARK_VERSION}-bin-hadoop2.7 ${SPARK_DIR} 
 
