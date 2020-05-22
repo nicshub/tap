@@ -8,7 +8,9 @@
 * 10.0.100.25 kafka-standalone-twitter-file
 * 10.0.100.31 mysql-server
 * 10.0.100.41 python-twitter-consumer
+* 10.0.100.42 spark-netcat
 * 10.0.100.51 elasticsearch
-* 10.0.100.52 kibaba
+* 10.0.100.52 kibana
+* 10.0.100.53 metricbeat
 * 10.0.100.61 R 
 * 10.0.100.71 hadoop

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-REM Stop
+# Stop
 docker stop kibana
 
-REM Remove previuos container 
+#  Remove previuos container 
 docker container rm kibana
 
-#REM Build
+# Build
 docker build ../kibana/ --tag tap:kibana
 
 docker stop kibana
