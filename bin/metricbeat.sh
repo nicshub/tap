@@ -8,4 +8,4 @@ docker container rm metricbeat
 # Build
 docker build ../metricbeat/ --tag tap:metricbeat
  
-docker run --ip 10.0.100.53  --network tap tap:metricbeat
+docker run --ip 10.0.100.53 -e ELASTICSEARCH_HOSTS=10.0.100.51 --network tap tap:metricbeat
